@@ -1,0 +1,57 @@
+JS CODE FOR STOPWATCH
+let min = 0, sec = 0, ms = 0;
+let timer;
+let running = false;
+
+const minDisplay = document.getElementById("min");
+const secDisplay = document.getElementById("sec");
+const msDisplay = document.getElementById("ms");
+const lapList = document.getElementById("lap-list");
+
+function updateTime() {
+  ms++;
+  if (ms >= 100) {
+    ms = 0;
+    sec++;
+  }
+  if (sec >= 60) {
+    sec = 0;
+    min++;
+  }
+  minDisplay.textContent = String(min).padStart(2, '0');
+  secDisplay.textContent = String(sec).padStart(2, '0');
+  msDisplay.textContent = String(ms).padStart(2, '0');
+}
+
+document.getElementById("start").addEventListener("click", () => {
+  if (!running) {
+    timer = setInterval(updateTime, 10);
+    running = true;
+  }
+});
+
+document.getElementById("pause").addEventListener("click", () => {
+  clearInterval(timer);
+  running = false;
+});
+
+document.getElementById("reset").addEventListener("click", () => {
+  clearInterval(timer);
+  min = 0;
+  sec = 0;
+  ms = 0;
+  running = false;
+  minDisplay.textContent = "00";
+  secDisplay.textContent = "00";
+  msDisplay.textContent = "00";
+  lapList.innerHTML = "";
+});
+
+document.getElementById("lap").addEventListener("click", () => {
+  if (running) {
+    const lapTime = `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}:${String(ms).padStart(2, '0')}`;
+    const li = document.createElement("li");
+    li.textContent = `Lap - ${lapTime}`;
+    lapList.appendChild(li);
+  }
+});
